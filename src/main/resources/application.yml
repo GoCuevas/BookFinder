@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/booksdb
     username: postgres
-    password: GONZALITR0
+    password: ${LTR_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
