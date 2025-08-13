@@ -11,14 +11,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
   Optional<Book> findByGutenbergId(Integer gutenbergId);
 
-  // Sobrescribimos findAll con EntityGraph para cargar languages y authors
+  // Carga autores + idiomas para evitar LazyInitializationException
+  @EntityGraph(attributePaths = {"languages", "authors"})
+  @Query("select b from Book b where b.gutenbergId = :gid")
+  Optional<Book> findWithDetailsByGutenbergId(@Param("gid") Integer gutenbergId);
+
+  // Sobrescribimos findAll con EntityGraph
   @Override
-  @EntityGraph(attributePaths = {"languages","authors"})
+  @EntityGraph(attributePaths = {"languages", "authors"})
   List<Book> findAll();
 
-  // Versión con detalle para idioma
-  @EntityGraph(attributePaths = {"languages","authors"})
+  // Consulta por idioma con colecciones cargadas
+  @EntityGraph(attributePaths = {"languages", "authors"})
   @Query("select b from Book b join b.languages l where l = :code")
   List<Book> findByLanguage(@Param("code") String code);
 }
-

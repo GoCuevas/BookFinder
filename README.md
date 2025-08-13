@@ -1,104 +1,92 @@
 # 📚 BookFinder
 
-BookFinder es una aplicación desarrollada en **Java 17 + Spring Boot** que permite buscar libros en la API pública de [Gutendex](https://gutendex.com/) y almacenarlos en una base de datos **PostgreSQL**.
+Aplicación Java con Spring Boot que permite buscar libros usando la API pública de [Gutendex](https://gutendex.com/) y registrar los resultados en una base de datos PostgreSQL.
 
 ## 🚀 Características
 
-1. **Buscar libros por título** (API Gutendex) y registrar el mejor resultado (mayor número de descargas) en la base de datos.
-2. **Listar libros registrados** en la base de datos.
-3. **Listar autores registrados**.
-4. **Listar autores vivos** en un año específico.
-5. **Listar libros por idioma**.
+- **Buscar libros por título** usando la API de Gutendex.
+- Registrar automáticamente el libro más popular encontrado (por número de descargas) en la base de datos.
+- Evitar duplicados: si el libro ya existe, no se vuelve a registrar.
+- Consultar todos los libros registrados.
+- Listar autores registrados.
+- Listar autores vivos en un año determinado.
+- Listar libros por idioma.
 
----
+## 🛠 Tecnologías utilizadas
 
-## 📦 Tecnologías utilizadas
-
-- **Java 17**
-- **Spring Boot 3**
+- **Java 17+**
+- **Spring Boot**
 - **Spring Data JPA**
 - **PostgreSQL**
-- **Lombok**
+- **Maven**
 - **Gutendex API**
 
----
+## 📂 Estructura del proyecto
 
-## ⚙️ Requisitos previos
-
-- **Java 17 o superior** instalado ([Descargar Java](https://adoptium.net/))
-- **Maven** instalado ([Descargar Maven](https://maven.apache.org/download.cgi))
-- **PostgreSQL** instalado y en ejecución ([Descargar PostgreSQL](https://www.postgresql.org/download/))
-- **IntelliJ IDEA** o tu IDE de preferencia
-
----
-
-## 🗄 Configuración de la base de datos
-
-1. Crear la base de datos:
-```sql
-CREATE DATABASE booksdb;
+```
+src/main/java/com/aluracursos/desafio/
+│
+├── domain/        # Entidades JPA (Book, Author)
+├── model/         # Clases DTO y utilidades de consumo API
+├── repository/    # Repositorios Spring Data JPA
+├── service/       # Lógica de negocio (BookService)
+└── web/           # Controladores REST
 ```
 
-2. Configurar las credenciales en el archivo `application.yml` o mediante **variables de entorno**:
+## ⚙️ Configuración
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/booksdb
-    username: postgres
-    password: ${LTR_PASSWORD}  # Variable de entorno con la contraseña
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate.format_sql: true
-server:
-  port: 8080
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/GoCuevas/BookFinder.git
+   cd BookFinder
+   ```
+
+2. Crea una base de datos en PostgreSQL:
+   ```sql
+   CREATE DATABASE booksdb;
+   ```
+
+3. Configura las credenciales en el archivo `application.yml` usando variables de entorno:
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:postgresql://127.0.0.1:5432/booksdb
+       username: postgres
+       password: ${LTR_PASSWORD}
+       driver-class-name: org.postgresql.Driver
+     jpa:
+       database-platform: org.hibernate.dialect.PostgreSQLDialect
+       hibernate:
+         ddl-auto: update
+       show-sql: true
+       properties:
+         hibernate.format_sql: true
+   server:
+     port: 8080
+   ```
+
+4. Ejecuta la aplicación:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+## 📋 Menú de consola
+
+```
+------ MENÚ ------
+1. Buscar libro por título (solo guarda el más popular)
+2. Listar todos los libros registrados
+3. Listar todos los autores
+4. Listar autores vivos en un año determinado
+5. Listar libros por idioma
+0. Salir
+------------------
 ```
 
-⚠ **Recomendado:** Usar variables de entorno para no exponer credenciales.
+## 📜 Ejemplo de salida
 
----
-
-## ▶ Ejecución del proyecto
-
-1. Clonar el repositorio:
-```bash
-git clone https://github.com/GoCuevas/BookFinder.git
-cd BookFinder
 ```
-
-2. Compilar y ejecutar con Maven:
-```bash
-mvn spring-boot:run
-```
-
-3. El menú en consola mostrará las opciones disponibles:
-```
-1 - Buscar libro por título
-2 - Listar libros registrados
-3 - Listar autores registrados
-4 - Listar autores vivos en un año
-5 - Listar libros por idioma
-0 - Salir
-```
-
----
-
-## 📡 Ejemplo de búsqueda
-
-Entrada:
-```
-1
-Título a buscar: Pride
-```
-
-Salida:
-```
------- LIBRO -----
+------ LIBRO ------
 Titulo: Pride and Prejudice
 Autor: Austen, Jane
 Idioma: en
@@ -106,19 +94,14 @@ Numero de descargas: 76493
 -------------------
 ```
 
-El libro se guardará automáticamente en la base de datos.
+## 🌐 Endpoints REST
 
----
-
-## 📌 Notas
-
-- El proyecto está limpio, sin archivos temporales (`.idea/`, `target/`) gracias al `.gitignore`.
-- Se usan **Lombok annotations** para simplificar el código.
-
----
+- `GET /api/books` → Lista todos los libros registrados
+- `GET /api/authors` → Lista todos los autores
+- `GET /api/authors/alive/{year}` → Lista autores vivos en un año dado
+- `GET /api/books/lang/{code}` → Lista libros por código de idioma
 
 ## 👨‍💻 Autor
 
 **Gonzalo Cuevas**  
-[LinkedIn](https://www.linkedin.com/in/gonzalocuevas-maritimeagent/) | [GitHub](https://github.com/GoCuevas)
-
+Proyecto ficticio para práctica de **Java Avanzado + Spring Boot** (Oracle Next Education - Alura Latam)
