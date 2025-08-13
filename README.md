@@ -1,52 +1,57 @@
 # 📚 BookFinder
 
-Aplicación Java con Spring Boot que permite buscar libros usando la API pública de [Gutendex](https://gutendex.com/) y registrar los resultados en una base de datos PostgreSQL.
+Aplicación Java Spring Boot que permite buscar libros en la API pública de **Gutendex**, mostrando el libro más popular según número de descargas, y guardándolo en una base de datos **PostgreSQL** para futuras consultas.
 
-## 🚀 Características
+---
 
-- **Buscar libros por título** usando la API de Gutendex.
-- Registrar automáticamente el libro más popular encontrado (por número de descargas) en la base de datos.
-- Evitar duplicados: si el libro ya existe, no se vuelve a registrar.
-- Consultar todos los libros registrados.
-- Listar autores registrados.
-- Listar autores vivos en un año determinado.
-- Listar libros por idioma.
+## 🚀 Requisitos Previos
 
-## 🛠 Tecnologías utilizadas
+Asegúrate de tener instalados:
 
-- **Java 17+**
-- **Spring Boot**
-- **Spring Data JPA**
-- **PostgreSQL**
-- **Maven**
-- **Gutendex API**
+- **Java**: versión 17 o superior  
+  [Descargar Java 17](https://adoptium.net/temurin/releases/?version=17)
 
-## 📂 Estructura del proyecto
+- **Maven**: versión 3.9.x o superior  
+  [Instalar Maven](https://maven.apache.org/install.html)
 
-```
-src/main/java/com/aluracursos/desafio/
-│
-├── domain/        # Entidades JPA (Book, Author)
-├── model/         # Clases DTO y utilidades de consumo API
-├── repository/    # Repositorios Spring Data JPA
-├── service/       # Lógica de negocio (BookService)
-└── web/           # Controladores REST
-```
+- **PostgreSQL**: versión 14 o superior  
+  [Descargar PostgreSQL](https://www.postgresql.org/download/)
 
-## ⚙️ Configuración
+- **Git** (para clonar el repositorio)  
+  [Instalar Git](https://git-scm.com/downloads)
 
-1. Clona este repositorio:
+---
+
+## 🛠 Configuración de la Base de Datos
+
+1. Inicia sesión en PostgreSQL y crea la base de datos:
+   ```sql
+   CREATE DATABASE booksdb;
+   ```
+
+2. Configura un usuario y contraseña (por ejemplo, `postgres` con tu clave de acceso).
+
+3. Crea una **variable de entorno** para la contraseña:
+   - **Windows (PowerShell)**:
+     ```powershell
+     setx LTR_PASSWORD "TuContraseñaPostgres"
+     ```
+   - **Linux / MacOS**:
+     ```bash
+     export LTR_PASSWORD="TuContraseñaPostgres"
+     ```
+
+---
+
+## 📦 Instalación del Proyecto
+
+1. Clona el repositorio:
    ```bash
    git clone https://github.com/GoCuevas/BookFinder.git
    cd BookFinder
    ```
 
-2. Crea una base de datos en PostgreSQL:
-   ```sql
-   CREATE DATABASE booksdb;
-   ```
-
-3. Configura las credenciales en el archivo `application.yml` usando variables de entorno:
+2. Verifica que el archivo `application.yml` esté configurado así:
    ```yaml
    spring:
      datasource:
@@ -65,43 +70,38 @@ src/main/java/com/aluracursos/desafio/
      port: 8080
    ```
 
-4. Ejecuta la aplicación:
-   ```bash
-   mvn spring-boot:run
-   ```
+---
 
-## 📋 Menú de consola
+## ▶️ Ejecución
 
-```
------- MENÚ ------
-1. Buscar libro por título (solo guarda el más popular)
-2. Listar todos los libros registrados
-3. Listar todos los autores
-4. Listar autores vivos en un año determinado
-5. Listar libros por idioma
-0. Salir
-------------------
+En la carpeta del proyecto, ejecuta:
+
+```bash
+mvn spring-boot:run
 ```
 
-## 📜 Ejemplo de salida
+La aplicación iniciará en **consola interactiva** para realizar búsquedas y almacenar resultados.
 
+---
+
+## 📋 Uso
+
+- **Opción 1**: Buscar un libro por título (muestra y guarda el más popular).
+- **Opción 2+**: Consultas adicionales según el menú.
+- **Opción 0**: Salir de la aplicación.
+
+---
+
+## 🧹 Limpieza de Datos
+
+Para reiniciar la base de datos y comenzar desde cero:
+
+```sql
+TRUNCATE TABLE book_authors, books, authors RESTART IDENTITY CASCADE;
 ```
------- LIBRO ------
-Titulo: Pride and Prejudice
-Autor: Austen, Jane
-Idioma: en
-Numero de descargas: 76493
--------------------
-```
 
-## 🌐 Endpoints REST
+---
 
-- `GET /api/books` → Lista todos los libros registrados
-- `GET /api/authors` → Lista todos los autores
-- `GET /api/authors/alive/{year}` → Lista autores vivos en un año dado
-- `GET /api/books/lang/{code}` → Lista libros por código de idioma
+## 📄 Licencia
 
-## 👨‍💻 Autor
-
-**Gonzalo Cuevas**  
-Proyecto ficticio para práctica de **Java Avanzado + Spring Boot** (Oracle Next Education - Alura Latam)
+Este proyecto es de uso educativo. Puedes modificarlo y adaptarlo libremente.
